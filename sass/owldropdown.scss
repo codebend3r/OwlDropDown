@@ -1,0 +1,37 @@
+@import "variables";
+
+.owl-dropdown {
+
+  display: block;
+
+  .owl-dropdown {
+    display: block;
+    padding: 0 10px;
+    margin: 0;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+
+  .owl-label {
+
+  }
+
+  .owl-list {
+    display: none;
+    width: 50px;
+    position: absolute;
+    li {
+      display: none;
+    }
+    &.open {
+      display: block;
+      width: 45px;
+      li {
+        display: block;
+        width: 45px;
+        cursor: pointer;
+      }
+    }
+  }
+
+}
