@@ -1,6 +1,5 @@
-OwlDropDown
-===========
+OwlSwipe
+========
+v0.2
 
-v0.1
-
-JQuery Plugin - a plugin for dropdown/combobox
+JQuery Plugin - touch event detection. Listens for swipes and touch movements.

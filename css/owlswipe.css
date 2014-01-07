@@ -1,0 +1,28 @@
+.swipe-area {
+  background-color: #ff413c;
+  width: 100%;
+  height: 400px;
+}
+.swipe-area p {
+  font-size: 36px;
+  color: white;
+  height: 400px;
+  line-height: 400px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.output-container {
+  background-color: #c0c0c0;
+  font-size: 16px;
+  padding: 5px;
+  font-weight: bold;
+}
+@media all and (-webkit-min-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 1.5), (min-device-pixel-ratio: 1.5), (min-resolution: 144dpi), (min-resolution: 1.5dppx) {
+  .output-container {
+    font-size: 32px;
+  }
+}
+.output-container .output {
+  font-weight: normal;
+}
