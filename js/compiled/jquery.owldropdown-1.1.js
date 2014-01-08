@@ -1,11 +1,3 @@
-/*
- * Owl Dropdown
- * crivas.net
- *
- * Author: Chester Rivas
- * Version: 1.1
- */
-
 var Owl = Owl || {};
 
 Owl.event = Owl.event || {};

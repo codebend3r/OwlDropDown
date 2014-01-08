@@ -50,13 +50,50 @@
 	    <h4>Example #1</h4>
 	    <p>Basic Usage</p>
 
+        <div class='province-picker'>
+            <p>Pick A Province</p>
+            <ul>
+                <li>Alberta</li>
+                <li>British Columbia</li>
+                <li>Manitoba</li>
+                <li>New Brunswick</li>
+                <li>Newfoundland & Labrador</li>
+                <li>Nova Scotia</li>
+                <li>Northwest Territories</li>
+                <li>Nunavut</li>
+                <li>Ontario</li>
+                <li>Prince Edward Island</li>
+                <li>Quebec</li>
+                <li>Saskatchewan</li>
+                <li>Yukon</li>
+            </ul>
+        </div>
+
 	    <h4>HTML</h4>
 	    <pre>
+&lt;div class='province-picker'&gt;
+&nbsp;&nbsp;&lt;p&gt;Pick A Province&lt;/p&gt;
+&nbsp;&nbsp;&lt;ul&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Alberta&lt;/li&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;British Columbia&lt;/li&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Manitoba&lt;/li&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;New Brunswick&lt;/li&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Newfoundland &amp; Labrador&lt;/li&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Nova Scotia&lt;/li&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Northwest Territories&lt;/li&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Nunavut&lt;/li&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Ontario&lt;/li&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Prince Edward Island&lt;/li&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Quebec&lt;/li&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Saskatchewan&lt;/li&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Yukon&lt;/li&gt;
+&nbsp;&nbsp;&lt;/ul&gt;
+&lt;/div&gt;
 	    </pre>
 
 	    <h4>JS</h4>
 	    <pre>
-
+$('.province-picker').owldropdown();
 	    </pre>
 
     </div>
@@ -72,10 +109,12 @@
                 <p><span class='key' data-bind='html: key'></span> - <span class='description' data-bind='html: description'></span></p>
                 <p><span class='val'>default value: </span><span class='default-value' data-bind='html: defaultValue'></span></p>
                 <p><span class='val'>type: </span><span class='type' data-bind='html: type'></span></p>
+                <!--
                 <p><u>function params</u></p>
                 <div data-bind='foreach: params'>
                     <p><span class='type' data-bind='html: name'></span> - <span class='paramdescription' data-bind='html: description'></span></p>
                 </div>
+                -->
             </li>
             <hr>
         </ul>
@@ -84,8 +123,12 @@
 
         <ul class='small-doc' data-bind='foreach: eventsList, visible: eventsList().length > 0'>
             <li>
-                <p><span class='key' data-bind='html: eventName'></span></p>
-                <p><span class='val'>event params: </span><span class='type' data-bind='html: target'></span></p>
+                <p><span class='key' data-bind='html: eventName'></span> -- <span class='key' data-bind='html: constant'></span></p>
+                <!--
+                <p data-bind='with: params'>
+                    <span class='type' data-bind='html: name'></span>: <span class='type' data-bind='html: value'></span>
+                </p>
+                -->
                 <p class='description' data-bind='html: description'></p>
             </li>
             <hr>
@@ -93,7 +136,7 @@
 
     </div>
 
-    <p class='legal'>© 2013 Crivas Inc. All rights reserved.</p>
+    <p class='legal'>© 2014 Crivas Inc. All rights reserved.</p>
 
 </div>
 

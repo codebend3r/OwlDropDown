@@ -1,0 +1,48 @@
+.owl-dropdown {
+  display: block;
+  position: relative;
+}
+.owl-dropdown p {
+  margin: 0;
+  padding: 0;
+}
+.owl-dropdown .owl-dropdown {
+  display: block;
+  padding: 0 10px;
+  margin: 0;
+  vertical-align: middle;
+  cursor: pointer;
+}
+.owl-dropdown .owl-label {
+  background-color: #cccccc;
+  border: 1px solid #333333;
+  width: 160px;
+  padding: 5px;
+  cursor: pointer;
+}
+.owl-dropdown .owl-list {
+  display: none;
+  width: 160px;
+  position: absolute;
+  top: 25px;
+  margin: -1px 0 0 0;
+}
+.owl-dropdown .owl-list li {
+  display: none;
+  background-color: #cccccc;
+  border: 1px solid #333333;
+  width: 160px;
+  padding: 5px;
+  margin: -1px 0 0 0;
+  cursor: pointer;
+}
+.owl-dropdown .owl-list li:hover {
+  background-color: #dddddd;
+}
+.owl-dropdown .owl-list.open {
+  display: block;
+  width: 160px;
+}
+.owl-dropdown .owl-list.open li {
+  display: block;
+}

@@ -74,7 +74,7 @@ module.exports = function(grunt) {
                 },
                 files: {
                     'css/main.css': 'sass/main.scss',
-                    'css/owlswipe.css': 'sass/owlswipe.scss'
+                    'css/<%= pkg.name %>.css': 'sass/<%= pkg.name %>.scss'
                 }
             }
         },
@@ -92,7 +92,6 @@ module.exports = function(grunt) {
 				    'js/vendor/TweenMax.min.js',
 				    'js/internal/Crivas.Main.js',
 				    'js/internal/Crivas.Documentation.js',
-				    'js/internal/Crivas.ImageData.js',
 				    'js/internal/Crivas.ViewModel.js',
 				    'js/internal/Crivas.Init.js'
 			    ],
@@ -108,7 +107,7 @@ module.exports = function(grunt) {
 			    src: [
 				    'css/reset.css',
 				    'css/main.css',
-				    'css/owlswipe.css'
+				    'css/<%= pkg.name %>.css'
 			    ],
 			    dest: 'css/compiled/<%= pkg.outputName %>-<%= pkg.version %>.css'
 		    }

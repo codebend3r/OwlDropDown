@@ -6,7 +6,6 @@ CS.ViewModel = function () {
         return {
             key: '<b>' + i.key + '</b>',
             defaultValue: i.defaultValue,
-            params: i.params,
             type: i.type,
             description: i.description,
             required: i.required ? '<span class="true">true</span>' : '<span class="false">false</span>'
@@ -16,6 +15,7 @@ CS.ViewModel = function () {
     self.eventsList = ko.observableArray(ko.utils.arrayMap(CS.documentation.events, function (i) {
         return {
             eventName: i.eventName,
+            constant: i.constant,
             description: i.description,
             target: i.target
         };
