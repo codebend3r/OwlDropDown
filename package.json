@@ -5,7 +5,7 @@
   "outputFolder": "www",
   "outputName": "owldropdown-website",
   "pluginName": "jquery.owldropdown",
-  "pluginVersion": "1.1",
+  "pluginVersion": "1.2",
   "port": "8000",
   "devDependencies": {
     "grunt": "~0.4.2",

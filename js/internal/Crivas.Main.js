@@ -5,6 +5,8 @@ CS.init = function () {
 
     ko.applyBindings(CS.ViewModel());
     console.log('OWL DROPDOWN');
-    $('.province-picker').owldropdown();
+    $('.province-picker').owldropdown({
+	    //inLineStyling: false
+    });
 
 };

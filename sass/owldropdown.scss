@@ -4,6 +4,9 @@
 
   display: block;
   position: relative;
+  &.open {
+
+  }
 
   p {
     margin: 0;
@@ -21,22 +24,27 @@
   .owl-label {
     background-color: #cccccc;
     border: 1px solid #333333;
-    width: 160px;
+    //width: 160px;
     padding: 5px;
     cursor: pointer;
+    position: relative;
+    &.open {
+      background-color: $tertiaryColour;
+      color: white;
+    }
   }
 
   .owl-list {
+    position: relative;
     display: none;
-    width: 160px;
-    position: absolute;
-    top: 25px;
+    //width: 160px;
+    top: 0;
     margin: -1px 0 0 0;
     li {
       display: none;
       background-color: #cccccc;
       border: 1px solid #333333;
-      width: 160px;
+      //width: 160px;
       padding: 5px;
       margin: -1px 0 0 0;
       cursor: pointer;
@@ -46,7 +54,7 @@
     }
     &.open {
       display: block;
-      width: 160px;
+      //width: 160px;
       li {
         display: block;
       }
