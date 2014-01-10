@@ -1,4 +1,5 @@
 bin
+*.log
 *.iml
 .idea
 .sass-cache
