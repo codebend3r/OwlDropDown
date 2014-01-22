@@ -6,13 +6,6 @@
   margin: 0;
   padding: 0;
 }
-.owl-dropdown .owl-dropdown {
-  display: block;
-  padding: 0 10px;
-  margin: 0;
-  vertical-align: middle;
-  cursor: pointer;
-}
 .owl-dropdown .owl-label {
   background-color: #cccccc;
   border: 1px solid #333333;
@@ -27,8 +20,9 @@
 .owl-dropdown .owl-list {
   position: relative;
   display: none;
-  top: 0;
-  margin: -1px 0 0 0;
+  width: 100%;
+  top: 24px;
+  margin: 0;
 }
 .owl-dropdown .owl-list li {
   display: none;
@@ -43,6 +37,7 @@
 }
 .owl-dropdown .owl-list.open {
   display: block;
+  position: absolute;
 }
 .owl-dropdown .owl-list.open li {
   display: block;
