@@ -143,7 +143,7 @@ $.fn.owldropdown = function (options) {
 					display: 'block',
 					left: '0px',
 					top: '0px',
-					zIndex: $this.findHighestZIndex() - 5
+					zIndex: $this.findHighestZIndex() + 1
 				});
 				$('div.bg-clickaway').on('click', $this.closeDropDown); // add handler for background clicking
 			}
