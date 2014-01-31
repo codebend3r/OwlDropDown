@@ -124,11 +124,10 @@ $('.province-picker').owldropdown();
         <ul class='small-doc' data-bind='foreach: eventsList, visible: eventsList().length > 0'>
             <li>
                 <p><span class='key' data-bind='html: eventName'></span> -- <span class='key' data-bind='html: constant'></span></p>
-                <!--
-                <p data-bind='with: params'>
+                <p>params</p>
+                <p data-bind='foreach: params, visible: params.length > 0'>
                     <span class='type' data-bind='html: name'></span>: <span class='type' data-bind='html: value'></span>
                 </p>
-                -->
                 <p class='description' data-bind='html: description'></p>
             </li>
             <hr>

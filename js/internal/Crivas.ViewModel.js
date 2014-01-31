@@ -17,7 +17,7 @@ CS.ViewModel = function () {
             eventName: i.eventName,
             constant: i.constant,
             description: i.description,
-            target: i.target
+            params: i.params
         };
     }));
 

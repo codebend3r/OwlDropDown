@@ -12,13 +12,16 @@
   padding: 5px;
   cursor: pointer;
   position: relative;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .owl-dropdown .owl-label.open {
-  background-color: #ff413c;
+  background-color: #888888;
   color: white;
 }
 .owl-dropdown .owl-list {
-  position: relative;
+  position: absolute;
   display: none;
   width: 100%;
   top: 24px;

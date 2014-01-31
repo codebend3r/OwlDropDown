@@ -118,22 +118,22 @@ CS.documentation = {
 			constant: 'Owl.event.DROPDOWNOPENED',
 			eventName: 'dropdownopened',
 			description: 'Dispatched when the dropdown element is open.',
-			params: {}
+			params: []
 		},
 		{
 			constant: 'Owl.event.DROPDOWNCLOSED',
 			eventName: 'dropdownclosed',
 			description: 'Dispatched when the dropdown element is closed.',
-			params: {}
+			params: []
 		},
 		{
 			constant: 'Owl.event.DROPDOWNITEMSELECTED',
 			eventName: 'dropdownitemselected',
 			description: 'Triggered when and dropdown item is clicked on.',
-			params: {
+			params: [{
 				name: 'itemTextValue',
 				value: 'The string value of the item that\'s clicked'
-			}
+			}]
 		}
 	]
 
