@@ -9599,15 +9599,6 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
 /* 'use strict' */
 
-/*!
- * pluginName: OwlDropDown
- * author: Chester Rivas
- * website: crivas.net
- * description: jquery plugin for dropdown/combobox support, customizable actions and events
- * version: 1.4
- * Copyright (c) 2014 Crivas Inc.
- */
-
 var Owl = Owl || {};
 
 Owl.event = Owl.event || {};
@@ -9616,210 +9607,245 @@ Owl.event.DROPDOWNCLOSED = 'dropdownclosed';
 Owl.event.DROPDOWNITEMSELECTED = 'dropdownitemselected';
 Owl.event.DEFAULTSELECTED = 'defaultselected';
 
-$.fn.owldropdown = function (options) {
+$.fn.owldropdown = function(options) {
 
-	var settings = $.extend({
-		// These are the defaults.
-		defaultLabel: undefined,
-		defaultValue: undefined,
-		innerListItemSelector: undefined,
-		allowResetToDefault: false,
-		labelElement: 'p',
-		listItemElement: 'ul',
-		changeLabelOnItemClick: true,
-		inLineStyling: true,
-		clickAway: false,
-		closeWhenSelected: true,
-		enableArrowKeys: false,
-		labelWidth: 160,
-		labelHeight: 25,
-		dropDownWidth: 160,
-		dropDownHeight: 25,
-		defaultIndex: 0
-	}, options);
+    var settings = $.extend({
+        // These are the defaults.
+        defaultLabel: undefined,
+        defaultValue: -1,
+        defaultIndex: 0,
+        innerListItemSelector: undefined,
+        allowResetToDefault: false,
+        labelElement: 'p',
+        listItemElement: 'ul',
+        changeLabelOnItemClick: true,
+        inLineStyling: true,
+        clickAway: false,
+        closeWhenSelected: true,
+        enableArrowKeys: false,
+        labelWidth: 160,
+        labelHeight: 25,
+        dropDownWidth: 160,
+        dropDownHeight: 25
+    }, options);
 
-	var $this = this,
-		menuOpen = false,
-		currentItemNumber = 0,
-		owlDropdownClassName = 'owl-dropdown',
-		owlLabelClassName = 'owl-label',
-		owlListClassName = 'owl-list',
-		labelSelector = settings.labelElement + '.' + owlLabelClassName,
-		listItemSelector = settings.listItemElement + '.' + owlListClassName;
+    var $this = this,
+        menuOpen = false,
+        currentItemNumber = 0,
+        owlDropdownClassName = 'owl-dropdown',
+        owlLabelClassName = 'owl-label',
+        owlListClassName = 'owl-list',
+        labelSelector = settings.labelElement + '.' + owlLabelClassName,
+        listItemSelector = settings.listItemElement + '.' + owlListClassName,
+        upKey = 38,
+        downKey = 40,
+        enterKey = 13;
 
-	$this.currentLabel = null;
-	$this.currentID = null;
+    $this.currentLabel = null;
+    $this.currentID = null;
 
-	/**
-	 init plugin
+    /**
+     init plugin
 
-	 @method initDropdown
-	 **/
-	$this.initDropdown = function () {
+     @method initDropdown
+     **/
+    $this.initDropdown = function() {
 
-		if (settings.allowResetToDefault && typeof settings.defaultLabel == 'undefined' && typeof settings.defaultValue == 'undefined') {
-			throw Error('if allowResetDefault is set to true then defaultLabel and defaultValue must be defined');
-		}
+        if (settings.allowResetToDefault && typeof settings.defaultLabel == 'undefined' && typeof settings.defaultValue == 'undefined') {
+            throw Error('if allowResetDefault is set to true then defaultLabel and defaultValue must be defined');
+        }
 
-		$this.addClass(owlDropdownClassName);
-		$this.find(settings.labelElement).addClass(owlLabelClassName);
-		$this.find(settings.listItemElement).addClass(owlListClassName);
-		$this.css({ // list
-			width: settings.labelWidth
-		});
-		$this.find(labelSelector).css({ // label <p>
-			zIndex: $this.findHighestZIndex()
-		});
-		$this.find(listItemSelector).css({ // list <ul>
-			zIndex: $this.findHighestZIndex()
-		});
-		$this.find(listItemSelector).find('li').css({ // list item <li>
-		});
+        $this.addClass(owlDropdownClassName);
+        $this.find(settings.labelElement).addClass(owlLabelClassName);
+        $this.find(settings.listItemElement).addClass(owlListClassName);
+        $this.css({ // list
+            width: settings.labelWidth
+        });
+        $this.find(labelSelector).css({ // label <p>
+            zIndex: $this.findHighestZIndex()
+        });
+        $this.find(listItemSelector).css({ // list <ul>
+            zIndex: $this.findHighestZIndex()
+        });
+        $this.find(listItemSelector).find('li').css({ // list item <li>
+        });
 
-		$this.find(listItemSelector).find('li').each(function (i) {
-			$(this).attr('buttonid', i);
-		});
+        $this.find(listItemSelector).find('li').each(function(i){
+            $(this).attr('buttonid', i);
+        });
 
-		if (settings.allowResetToDefault) {
-			var prependElement = $($this.find(listItemSelector).find('li')[0]).clone(),
-				defaultItemValue = '',
-				innerLabelElement;
-			$(prependElement).addClass('default');
-			$(prependElement).attr('buttonid', '-1');
-			innerLabelElement = typeof settings.innerListItemSelector == 'null' ?
-				$(prependElement) :
-				$(prependElement).find(settings.innerListItemSelector);
-			if (typeof settings.defaultValue !== 'null') {
-				defaultItemValue = settings.defaultValue;
-			} else if (typeof settings.defaultLabel !== 'null') {
-				defaultItemValue = settings.defaultLabel;
-			} else {
-				defaultItemValue = '';
-			}
-			$(innerLabelElement).text(defaultItemValue);
-			$this.find(listItemSelector).prepend(prependElement);
-		}
+        if (settings.allowResetToDefault) {
 
-		if (typeof settings.defaultLabel !== 'undefined') {
-			$this.find(labelSelector).text(settings.defaultLabel);
-		} else {
-			var firstValue = typeof settings.innerListItemSelector == 'null' ?
-				$($this.find(listItemSelector).find('li').find(settings.innerListItemSelector)[settings.defaultIndex]).text().trim() :
-				$($this.find(listItemSelector).find('li')[settings.defaultIndex]).text().trim();
-			$this.find(labelSelector).text(firstValue);
-		}
+            var prependElement = $($this.find(listItemSelector).find('li')[0]).clone(),
+                defaultItemValue = '',
+                innerLabelElement;
 
-		$this.find(labelSelector).on('click', $this.toggleDropDown);
-		$this.find(listItemSelector).find('li').on('click', $this.itemClicked); // add handler for item clicking
+            $(prependElement).addClass('default');
+            $(prependElement).attr('buttonid', '-1');
 
-	};
+            innerLabelElement = typeof settings.innerListItemSelector == 'null' ?
+                $(prependElement) :
+                $(prependElement).find(settings.innerListItemSelector);
 
-	$this.getDefaultValue = function () {
-		return typeof settings.defaultValue !== 'undefined' ? settings.defaultValue : settings.defaultLabel;
-	};
+            if (typeof settings.defaultValue !== 'null') {
+                defaultItemValue = settings.defaultValue;
+            } else if (typeof settings.defaultLabel !== 'null') {
+                defaultItemValue = settings.defaultLabel;
+            }
 
-	$this.toggleDropDown = function () {
-		menuOpen = !menuOpen;
-		if (menuOpen) {
-			$this.openDropDown();
-		} else {
-			$this.closeDropDown();
-		}
-		return false;
-	};
+            $(innerLabelElement).text(defaultItemValue);
+            $this.find(listItemSelector).prepend(prependElement);
 
-	$this.openDropDown = function () {
-		menuOpen = true;
-		$this.addClass('open');
-		$this.find(listItemSelector).addClass('open');
-		$this.find(labelSelector).addClass('open');
-		if (settings.clickAway) {
-			if (!$('.bg-clickaway').length) {
-				$('body').append("<div class='bg-clickaway'></div>"); // create element on body
-				$('div.bg-clickaway').css({ // style hidden background
-					width: '200%',
-					height: '200%',
-					position: 'fixed',
-					backgroundColor: 'rgba(0,0,0,0.8)',
-					display: 'block',
-					left: '0px',
-					top: '0px',
-					zIndex: $this.findHighestZIndex() + 1
-				});
-				$('div.bg-clickaway').on('click', $this.closeDropDown); // add handler for background clicking
-			}
-			//$this.off('click'); // remove handler for entire element click
-		}
-		//$this.find(labelSelector).on('click', closeDropDown);  // add handlers to close dropdown
-		if (settings.enableAsrrowKeys) {
-			$(document).on('keydown', function (e) {
-				console.log('keyCode', e.keyCode);
-				if (e.keyCode == 38) {
-					currentItemNumber -= 1;
-					var labelValue = $this.find(listItemSelector).find('li')[currentItemNumber].text();
-					console.log(labelValue);
-					$this.find(labelSelector).text(labelValue);
-					e.stopPropagation();
-				} else if (e.keyCode == 40) {
-					var labelValue = $this.find(listItemSelector).find('li')[currentItemNumber].text();
-					console.log(labelValue);
-					$this.find(labelSelector).text(labelValue);
-					currentItemNumber += 1;
-					e.stopPropagation();
-				}
-			});
-		}
+        }
 
-		$this.trigger(Owl.event.DROPDOWNOPENED);
-		//return false;
-	};
+        if (typeof settings.defaultLabel !== 'undefined') {
 
-	$this.closeDropDown = function () {
-		menuOpen = false;
-		$this.removeClass('open');
-		$this.find(listItemSelector).removeClass('open');
-		$this.find(labelSelector).removeClass('open');
-		if ($('.bg-clickaway').length) $('.bg-clickaway').remove(); // remove background click away element
-		$this.on('click', $this.openDropDown); // re-add open dropdown handler
-		if (settings.enableArrowKeys) {
-			$(document).off('keydown');
-		}
-		$this.trigger(Owl.event.DROPDOWNCLOSED);
-		//return false;
-	};
+            $this.find(labelSelector).text(settings.defaultLabel);
 
-	$this.itemClicked = function (e) {
-		$this.currentLabel = $(e.currentTarget).text().trim();
-		$this.currentID = $(e.currentTarget).attr('buttonid');
+        } else {
 
-		if ($this.currentID == '-1') {
-			if (settings.changeLabelOnItemClick) $this.find(labelSelector).text(settings.defaultLabel); // change label element text on item click
-			$this.trigger(Owl.event.DEFAULTSELECTED, [ $this.getDefaultValue(), $this.currentID ]);
-			$this.trigger(Owl.event.DROPDOWNITEMSELECTED, [ $this.getDefaultValue(), $this.currentID ]);
-		} else {
-			if (settings.changeLabelOnItemClick) $this.find(labelSelector).text($this.currentLabel); // change label element text on item click
-			$this.trigger(Owl.event.DROPDOWNITEMSELECTED, [ $this.currentLabel, $this.currentID ]);
-		}
-		if (settings.closeWhenSelected) $this.closeDropDown(); // close dropdown when item is clicked
-		e.stopPropagation();
-		//return false;
-	};
+            var firstValue = typeof settings.innerListItemSelector == 'null' ?
+                $($this.find(listItemSelector).find('li').find(settings.innerListItemSelector)[settings.defaultIndex]).text().trim() :
+                $($this.find(listItemSelector).find('li')[settings.defaultIndex]).text().trim();
+            $this.find(labelSelector).text(firstValue);
 
-	$this.findHighestZIndex = function (elem) {
-		var elems = document.getElementsByTagName(elem);
-		var highest = 100;
-		for (var i = 0; i < elems.length; i++) {
-			var zindex = document.defaultView.getComputedStyle(elems[i], null).getPropertyValue("z-index");
-			if ((zindex > highest) && (zindex != 'auto')) {
-				highest = zindex;
-			}
-		}
-		return highest;
-	};
+        }
 
-	$this.initDropdown();
+        $this.find(labelSelector).on('click', $this.toggleDropDown);
+        $this.find(listItemSelector).find('li').on('click', $this.itemClicked); // add handler for item clicking
 
-	return $this;
+    };
+
+    $this.getDefaultValue = function() {
+        return typeof settings.defaultValue !== 'undefined' ? settings.defaultValue : settings.defaultLabel;
+    };
+
+    $this.toggleDropDown = function() {
+        menuOpen = !menuOpen;
+        if (menuOpen) {
+            $this.openDropDown();
+        } else {
+            $this.closeDropDown();
+        }
+        return false;
+    };
+
+    $this.openDropDown = function() {
+        menuOpen = true;
+        $this.addClass('open');
+        $this.find(listItemSelector).addClass('open');
+        $this.find(labelSelector).addClass('open');
+        if (settings.clickAway) {
+            if (!$('.bg-clickaway').length) {
+                $('body').append("<div class='bg-clickaway'></div>"); // create element on body
+                $('div.bg-clickaway').css({ // style hidden background
+                    width: '200%',
+                    height: '200%',
+                    position: 'fixed',
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    display: 'block',
+                    left: '0px',
+                    top: '0px',
+                    zIndex: $this.findHighestZIndex() - 5
+                });
+                $('div.bg-clickaway').on('click', $this.closeDropDown); // add handler for background clicking
+            }
+            //$this.off('click'); // remove handler for entire element click
+        }
+        //$this.find(labelSelector).on('click', closeDropDown);  // add handlers to close dropdown
+        if (settings.enableArrowKeys) {
+            $(document).on('keydown', function (e) {
+                var max = $this.find(listItemSelector).find('li').length;
+                if (e.keyCode == upKey) {
+
+                    currentItemNumber -= 1;
+                    if (currentItemNumber <= -1) currentItemNumber = max - 1;
+
+                    var selectedElement = typeof settings.innerListItemSelector == 'null' ?
+                            $this.find(listItemSelector).find('li').find(settings.innerListItemSelector)[currentItemNumber] :
+                            $this.find(listItemSelector).find('li')[currentItemNumber],
+                        labelValue = $(selectedElement).text();
+
+                    $(selectedElement).focus();
+                    $this.find(labelSelector).text(labelValue);
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                } else if (e.keyCode == downKey) {
+
+                    currentItemNumber += 1;
+                    if (currentItemNumber >= max) currentItemNumber = 0;
+
+                    var selectedElement = typeof settings.innerListItemSelector == 'null' ?
+                            $this.find(listItemSelector).find('li').find(settings.innerListItemSelector)[currentItemNumber] :
+                            $this.find(listItemSelector).find('li')[currentItemNumber],
+                        labelValue = $(selectedElement).text();
+
+                    $(selectedElement).focus();
+                    $this.find(labelSelector).text(labelValue);
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                } else if (e.keyCode == enterKey) {
+
+                    var selectedElement = typeof settings.innerListItemSelector == 'null' ?
+                        $this.find(listItemSelector).find('li').find(settings.innerListItemSelector)[currentItemNumber] :
+                        $this.find(listItemSelector).find('li')[currentItemNumber];
+
+                    $(selectedElement).trigger('click');
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                }
+            });
+        }
+
+        $this.trigger(Owl.event.DROPDOWNOPENED);
+    };
+
+    $this.closeDropDown = function() {
+        menuOpen = false;
+        $this.removeClass('open');
+        $this.find(listItemSelector).removeClass('open');
+        $this.find(labelSelector).removeClass('open');
+        if ($('.bg-clickaway').length) $('.bg-clickaway').remove(); // remove background click away element
+        $this.on('click', $this.openDropDown); // re-add open dropdown handler
+        if (settings.enableArrowKeys) {
+            $(document).off('keydown');
+        }
+        $this.trigger(Owl.event.DROPDOWNCLOSED);
+    };
+
+    $this.itemClicked = function(e) {
+        $this.currentLabel = $(e.currentTarget).text().trim();
+        $this.currentID = $(e.currentTarget).attr('buttonid');
+        if ($this.currentID == '-1') {
+            if (settings.changeLabelOnItemClick) $this.find(labelSelector).text(settings.defaultLabel); // change label element text on item click
+            $this.trigger(Owl.event.DEFAULTSELECTED, [ $this.getDefaultValue(), $this.currentID ]);
+            $this.trigger(Owl.event.DROPDOWNITEMSELECTED, [ $this.getDefaultValue(), $this.currentID ]);
+        } else {
+            if (settings.changeLabelOnItemClick) $this.find(labelSelector).text($this.currentLabel); // change label element text on item click
+            $this.trigger(Owl.event.DROPDOWNITEMSELECTED, [ $this.currentLabel, $this.currentID ]);
+        }
+        if (settings.closeWhenSelected) $this.closeDropDown(); // close dropdown when item is clicked
+        e.stopPropagation();
+    };
+
+    $this.findHighestZIndex = function(elem) {
+        var elems = document.getElementsByTagName(elem),
+            highest = 100;
+        for (var i = 0; i < elems.length; i++) {
+            var zindex = document.defaultView.getComputedStyle(elems[i],null).getPropertyValue("z-index");
+            if ((zindex > highest) && (zindex != 'auto')) {
+                highest = zindex;
+            }
+        }
+        return highest;
+    };
+
+    $this.initDropdown();
+
+    return $this;
 };
 
 /* 'use strict' */
@@ -9936,11 +9962,11 @@ var CS = {};
 
 CS.init = function () {
 
-    ko.applyBindings(CS.ViewModel());
-    console.log('OWL DROPDOWN');
-    $('.province-picker').owldropdown({
-	    //inLineStyling: false
+	$('.province-picker').owldropdown({
+	    defaultLabel: 'Pick a Province Now'
     });
+
+    ko.applyBindings(CS.ViewModel());
 
 };
 
@@ -9953,42 +9979,42 @@ CS.documentation = {
 		    key: 'defaultLabel',
 		    defaultValue: 'undefined',
 		    type: 'N/A',
-		    description: 'N/A',
+		    description: 'The default label to display on initializing.',
 		    required: false
 	    },
 	    {
 		    key: 'defaultValue',
-		    defaultValue: 'undefined',
+		    defaultValue: '-1',
 		    type: 'N/A',
-		    description: 'N/A',
+		    description: 'The default value for the default label.',
 		    required: false
 	    },
 	    {
 		    key: 'defaultIndex',
 		    defaultValue: 0,
-		    type: 'N/A',
-		    description: 'N/A',
+		    type: 'Number',
+		    description: 'The default index the plugin will initialize. By default it\'s 0.',
 		    required: false
 	    },
 	    {
 		    key: 'innerListItemSelector',
 		    defaultValue: 'undefined',
 		    type: 'String | Selector',
-		    description: 'A JQuery selector which is used to get and set the value within a list item',
+		    description: 'A JQuery selector which is used to get and set the value within a list item, ie: $(\'span\')',
 		    required: false
 	    },
 		{
 			key: 'labelElement',
 			defaultValue: 'p',
 			type: 'String',
-			description: 'N/A',
+			description: 'The tag representing the label shown when dropdown is closed. By default it\'s set to p meaning &lt;p&gt; tag.',
 			required: false
 		},
 		{
 			key: 'dropDownElement',
 			defaultValue: 'ul',
 			type: 'String',
-			description: 'N/A',
+			description: 'The tag representing the dropdown element. By default it\'s set to p meaning &lt;ul&gt; tag.',
 			required: false
 		},
 		{
@@ -10002,42 +10028,49 @@ CS.documentation = {
 			key: 'clickAway',
 			defaultValue: 'true',
 			type: 'N/A',
-			description: 'N/A',
+			description: 'Whether to close the dropdown when clicked away from the dropdown.',
 			required: false
 		},
 		{
 			key: 'closeWhenSelected',
 			defaultValue: 'true',
 			type: 'N/A',
-			description: 'N/A',
+			description: 'Whether to close the dropdown when a value is selected.',
+			required: false
+		},
+		{
+			key: 'enableArrowKeys',
+			defaultValue: 'true',
+			type: 'N/A',
+			description: 'Whether to use keyboard arrows and enter key to toggle through the dropdown options.',
 			required: false
 		},
 		{
 			key: 'labelWidth',
 			defaultValue: '160',
 			type: 'N/A',
-			description: 'N/A',
+			description: 'The width of the label element.',
 			required: false
 		},
 		{
 			key: 'labelHeight',
 			defaultValue: '25',
 			type: 'N/A',
-			description: 'N/A',
+			description: 'The height of the label element.',
 			required: false
 		},
 		{
 			key: 'dropDownWidth',
 			defaultValue: '160',
 			type: 'N/A',
-			description: 'N/A',
+			description: 'The width of the dropdown element.',
 			required: false
 		},
 		{
 			key: 'dropdownHeight',
 			defaultValue: '25',
 			type: 'N/A',
-			description: 'N/A',
+			description: 'The height of the dropdown element.',
 			required: false
 		}
     ],
@@ -10058,11 +10091,17 @@ CS.documentation = {
 		{
 			constant: 'Owl.event.DROPDOWNITEMSELECTED',
 			eventName: 'dropdownitemselected',
-			description: 'Triggered when and dropdown item is clicked on.',
-			params: [{
-				name: 'itemTextValue',
-				value: 'The string value of the item that\'s clicked'
-			}]
+			description: 'Triggered when and dropdown item is selected.',
+			params: [
+				{
+					name: 'itemTextValue',
+					value: 'The string value of the item that\'s selected'
+				},
+				{
+					name: 'itemIndexValue',
+					value: 'The index value of the item that\'s selected'
+				}
+			]
 		}
 	]
 

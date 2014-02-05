@@ -3,10 +3,10 @@ var CS = {};
 
 CS.init = function () {
 
-    ko.applyBindings(CS.ViewModel());
-    console.log('OWL DROPDOWN');
-    $('.province-picker').owldropdown({
-	    //inLineStyling: false
+	$('.province-picker').owldropdown({
+	    defaultLabel: 'Pick a Province Now'
     });
+
+    ko.applyBindings(CS.ViewModel());
 
 };
